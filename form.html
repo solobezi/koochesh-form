@@ -1,1 +1,45 @@
-hello
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>فرم مشاوره</title>
+</head>
+<body>
+  <form id="form">
+    <input type="text" id="name" placeholder="نام"><br><br>
+    <input type="text" id="phone" placeholder="شماره تماس"><br><br>
+    <textarea id="message" placeholder="پیام شما"></textarea><br><br>
+    <button type="submit">ارسال</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    document.getElementById('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const message = document.getElementById('message').value;
+      const status = document.getElementById('status');
+
+      fetch("https://script.google.com/macros/s/AKfycbzZQWamgTodoUEOw5B3RkObljMSRSMsJK26i7Ut9IhwHByqpoffeP4Smh00BlsdEDiA/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, phone, message })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        status.innerText = msg;
+        status.style.color = "green";
+        document.getElementById('form').reset();
+      })
+      .catch(() => {
+        status.innerText = "❌ خطا در ارسال";
+        status.style.color = "red";
+      });
+    });
+  </script>
+</body>
+</html>
